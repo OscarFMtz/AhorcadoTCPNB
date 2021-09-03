@@ -3,7 +3,7 @@ solovina
 DataOutputStream
 new
 BufferedReader
-hola
+estaesunaprueba
 mundo
 oscar
 ServerSocketChannel

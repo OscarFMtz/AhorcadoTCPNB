@@ -5,18 +5,10 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-//import javax.swing.JFileChooser;
-
 public class CAhorcadoTCPNB {
     public static void main(String[] args){
         try{
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//buffer para dis de E/S estandar        
-            
-            /*System.out.printf("Escriba la dirección del servidor:");
-            String dir = br.readLine();                          //dir="127.0.0.1"
-            System.out.printf("\n\nEscriba el puerto:");
-            int pto = Integer.parseInt(br.readLine());          //9999;
-            */
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String dir="127.0.0.1";
             int pto = 9999;
             int error=0,contR=0,contW=0,tamwords=0,check=0;
@@ -31,28 +23,28 @@ public class CAhorcadoTCPNB {
             cl.connect(dst);
 
             while(true){
-                sel.select();//bloqueo hasta que ocurra un evento connect
+                sel.select();
                 Iterator<SelectionKey>it = sel.selectedKeys().iterator();
                 while(it.hasNext()){
                     SelectionKey k = (SelectionKey)it.next();
                     it.remove();
                     if(k.isConnectable()){
                         SocketChannel ch = (SocketChannel)k.channel();
-                        if(ch.isConnectionPending()){//Indica si hay una operación de conexión en curso en este canal.
+                        if(ch.isConnectionPending()){
                             System.out.println("Estableciendo conexion con el servidor... espere..");
                             try{
-                                ch.finishConnect();//Finaliza el proceso de conexión de un canal de enchufe.
+                                ch.finishConnect();
                             }catch(Exception e){
                                 e.printStackTrace();
-                            }//catch
-                        }//if                        
+                            }
+                        }  
                         ch.register(sel, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
                         continue;
-                    }else if(k.isReadable()){//evento de lectura
+                    }else if(k.isReadable()){
                         SocketChannel ch = (SocketChannel)k.channel();
-                        ByteBuffer b = ByteBuffer.allocateDirect(2000);//cantidad en bytes del buffer
+                        ByteBuffer b = ByteBuffer.allocateDirect(2000);
                         b.clear();                            
-                        
+
                         if(contR==0){
                             ch.read(b);   
                             b.flip();
@@ -98,15 +90,13 @@ public class CAhorcadoTCPNB {
                         k.interestOps(SelectionKey.OP_WRITE);
                         continue;
 
-                    }else if(k.isWritable()){//evento de escritura
+                    }else if(k.isWritable()){
                        SocketChannel ch = (SocketChannel)k.channel();
-               			//Mandar Dificultad, nombre y edad
 
                         if(contW==0){
                             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                            ObjectOutputStream oos= new ObjectOutputStream(bos);//instanciar    
-                        
-                            //Escribir datos Dificultad[1,2], Nombre, Edad 
+                            ObjectOutputStream oos= new ObjectOutputStream(bos);
+
                             System.out.printf("Ingrese el nivel de dificultad(1,2): \n 1-facil \n 2-difícil \n ");
                             int level = Integer.parseInt(br.readLine()); 
                             System.out.printf("\nEscriba el nombre:\n");
@@ -114,10 +104,9 @@ public class CAhorcadoTCPNB {
                             System.out.printf("\nEscriba su edad:\n");
                             int edad = Integer.parseInt(br.readLine());
 
-                            Usuario u = new Usuario(level, nombre,edad);//instanciar objeto a enviar
-
+                            Usuario u = new Usuario(level, nombre,edad);
                             oos.writeObject(u);
-                            oos.flush();//me aseguro de que se envie
+                            oos.flush();
                             oos.close();
                             byte [] data = bos.toByteArray();
                             b2 = ByteBuffer.wrap(data);
@@ -135,17 +124,15 @@ public class CAhorcadoTCPNB {
                             ch.write(buffer);
 
                         }
-                        
                         k.interestOps(SelectionKey.OP_READ);
                         continue;
-                        // ch.close();
                     }
-                }//while   
-            }//while
+                }
+            }
         }catch(Exception e){
             e.printStackTrace();
-        }//catch
+        }
        
-    }//main
+    }
 }
 
