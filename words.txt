@@ -1,0 +1,10 @@
+JFileChooser
+solovina
+DataOutputStream
+new
+BufferedReader
+hola
+mundo
+oscar
+ServerSocketChannel
+ahorcado
