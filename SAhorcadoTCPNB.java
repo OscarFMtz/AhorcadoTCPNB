@@ -7,6 +7,10 @@ import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 
+/*
+    sout(Comentario de la rama1);
+
+*/
 public class SAhorcadoTCPNB {
     public static void main(String[] args){
         try{           
